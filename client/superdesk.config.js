@@ -55,11 +55,6 @@ module.exports = function(grunt) {
             },
         },
 
-        workspace: {
-            analytics: true,
-            planning: true,
-            assignments: true
-        },
 
         langOverride: {
             'en': {
