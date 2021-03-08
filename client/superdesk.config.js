@@ -121,6 +121,13 @@ module.exports = function(grunt) {
                 'flags',
                 'updated',
                 'provider',
+                {
+                    field: 'authors',
+                    options: {
+                        displayField: 'email',
+                        includeRoles: ['photographer', 'writer'],
+                    },
+                },
                 'desk',
                 'fetchedDesk',
                 'associatedItems',
