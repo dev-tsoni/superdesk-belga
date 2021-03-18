@@ -44,7 +44,7 @@ module.exports = function(grunt) {
             editor3: true,
             validatePointOfInterestForImages: false,
             editorHighlights: true,
-            planning: true,
+            // planning: true,
             searchShortcut: true,
             editFeaturedImage: true,
             hideCreatePackage: true,
