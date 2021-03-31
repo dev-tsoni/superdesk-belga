@@ -1167,6 +1167,10 @@ class BelgaNewsML12FormatterTextTest(TestCase):
                 'urn:newsml:localhost:5000:2019-04-03T15:41:53.479892:1628c9b4-6261-42c8-ad43-77c132bc0ba5'},
             {'FormalName': 'EditorialInfo', 'Value': 'Vestibulum ac diam sit amet quam vehicula elementum '
                                                      'sed sit amet dui.'},
+            {'FormalName': 'Distribution', 'Value': 'B'},
+            {'FormalName': 'Label', 'Value': 'A1'},
+            {'FormalName': 'Label', 'Value': 'A2'},
+            {'FormalName': 'Label', 'Value': 'R1'},
             {'FormalName': 'NewsPackage'},
             {'FormalName': 'NewsPackage'},
             {'FormalName': 'NewsPackage'},
@@ -1197,11 +1201,7 @@ class BelgaNewsML12FormatterTextTest(TestCase):
             )
         self.assertDictEqual(
             dict(newscomponent_2_level.xpath('AdministrativeMetadata/Source/Party')[0].attrib),
-            {'FormalName': 'DPA'}
-        )
-        self.assertDictEqual(
-            dict(newscomponent_2_level.xpath('AdministrativeMetadata/Source/Party')[1].attrib),
-            {'FormalName': 'ANP'}
+            {'FormalName': 'DPA/ANP'}
         )
         # NewsML -> NewsItem -> NewsComponent -> NewsComponent -> DescriptiveMetadata
         descriptivemetadata = newscomponent_2_level.xpath('DescriptiveMetadata')[0]
@@ -2100,7 +2100,7 @@ class BelgaNewsML12FormatterTextTest(TestCase):
         )[0]
         self.assertEqual(
             _format.attrib['FormalName'],
-            'Belgaimage:154670498:800x800:w?v=5d5aaa94&m=dnikoiil'
+            'Jpeg',
         )
 
     def test_belga_coverage_custom_field(self):
@@ -2165,7 +2165,7 @@ class BelgaNewsML12FormatterTextTest(TestCase):
         )[0]
         self.assertEqual(
             _format.attrib['FormalName'],
-            'Belgaimage:154669691:800x800:w?v=6666666&m=aaaaaaaa'
+            'Jpeg',
         )
 
     def test_audio_in_editor_and_related(self):

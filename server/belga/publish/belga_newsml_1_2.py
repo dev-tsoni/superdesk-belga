@@ -789,6 +789,8 @@ class BelgaNewsML12Formatter(NewsML12Formatter):
 
         format_name = filename.rsplit('.', 1)[-1].capitalize()
         format_name = FORMAT_MAP.get(format_name, format_name)
+        if 'belgagallery' in rendition.get('belga-urn'):
+            format_name = FORMAT_MAP['Jpg']
 
         SubElement(contentitem, 'Format', {'FormalName': format_name})
         if rendition.get('mimetype'):
@@ -836,7 +838,6 @@ class BelgaNewsML12Formatter(NewsML12Formatter):
                         )
                     )
                     SubElement(newslines, 'KeywordLine').text = subject['name']
-                break
 
         # KeywordLine from belga-keywords
         for subject in item.get('subject', []):
@@ -960,17 +961,27 @@ class BelgaNewsML12Formatter(NewsML12Formatter):
                     property_newspackage, 'Property',
                     {'FormalName': 'NewsProduct', 'Value': news_product_value}
                 )
+            if subject.get('scheme') == 'label':
+                SubElement(
+                    administrative_metadata, 'Property',
+                    {'FormalName': 'Label', 'Value': str(subject['qcode'])}
+                )
+            if subject.get('scheme') == 'distribution':
+                SubElement(
+                    administrative_metadata, 'Property',
+                    {'FormalName': 'Distribution', 'Value': get_distribution_value(subject['qcode'])}
+                )
 
         sources = [subj['qcode'] for subj in item.get('subject', []) if subj.get('scheme') == 'sources']
         sources += [subj['qcode'] for subj in item.get('subject', []) if subj.get('scheme') == 'media-source']
         sources += [item['creditline']] if item.get('creditline') else []
         if sources:
             source_element = SubElement(administrative_metadata, 'Source')
-            for source in sources:
-                SubElement(
-                    source_element,
-                    'Party', {'FormalName': source}
-                )
+            SubElement(
+                source_element,
+                'Party',
+                {'FormalName': '/'.join([source for source in sources])},
+            )
 
     def _format_descriptive_metadata(self, newscomponent_2_level, item):
         """
@@ -1294,3 +1305,9 @@ class BelgaNewsML12Formatter(NewsML12Formatter):
             sd_item.pop('fields_meta', None)
 
         return tuple(newsml_items_chain)
+
+
+def get_distribution_value(qcode):
+    if str(qcode).lower() == 'bilingual':
+        return 'B'
+    return 'Default'

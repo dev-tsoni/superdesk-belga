@@ -239,7 +239,7 @@ class BaseBelgaNewsMLOneFeedParser(BelgaNewsMLMixin, NewsMLOneFeedParser):
 
             element = newsident_el.find('NewsItemId')
             if element is not None:
-                item['item_id'] = element.text
+                item["guid"] = item["item_id"] = element.text
 
             element = newsident_el.find('RevisionId')
             if element is not None:
@@ -355,7 +355,7 @@ class BaseBelgaNewsMLOneFeedParser(BelgaNewsMLMixin, NewsMLOneFeedParser):
         if component_el is None:
             return
 
-        if component_el.attrib.get('Duid') is not None:
+        if component_el.attrib.get('Duid') is not None and "guid" not in item:
             item['guid'] = component_el.attrib.get('Duid', '')
 
         # Essential is CV
@@ -439,14 +439,6 @@ class BaseBelgaNewsMLOneFeedParser(BelgaNewsMLMixin, NewsMLOneFeedParser):
             element = admin_el.find('Source/Party')
             if element is not None:
                 item['administrative']['source'] = element.get('FormalName', '')
-
-            elements = admin_el.findall('Property')
-            for element in elements:
-                if element.get('FormalName', '') == 'author':
-                    item.setdefault('authors', []).append({
-                        'name': element.get('Value', '').replace(' ', ''),
-                        'role': element.get('FormalName', '')
-                    })
 
         # parser DescriptiveMetadata element
         if component_el.find('DescriptiveMetadata') is not None:
