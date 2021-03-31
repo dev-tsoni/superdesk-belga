@@ -2,9 +2,6 @@ import React from 'react';
 import angular from 'angular';
 import {IUser} from 'superdesk-api';
 import {startApp} from 'superdesk-core/scripts/index';
-import belgaImage from './image';
-import belga360Archive from './360archive';
-import belgaPress from './belgapress';
 import {AvatarContentText} from 'superdesk-ui-framework';
 
 class UserAvatar extends React.PureComponent<{user: Partial<IUser>}> {
@@ -26,8 +23,4 @@ setTimeout(() => {
     startApp([], {UserAvatar});
 });
 
-export default angular.module('belga', [
-    belgaImage.name,
-    belga360Archive.name,
-    belgaPress.name,
-]);
+export default angular.module('belga', []);
